@@ -1,4 +1,3 @@
-%% Horn closed-form quaternion method
 function hgt = hornConf3D(arbitrary, control)
 %% HORN3DCONF  Horn absolute orientation (quaternion method)
 %
