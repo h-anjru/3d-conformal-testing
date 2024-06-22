@@ -1,5 +1,3 @@
-%% Lassiter direct linear initial approximation method
-
 function [hgt, jac, Kvec] = lasConf3D_2(arbitrary, control)
 %% LAS3DCONF2 (Another) Lassiter 3D conformal transformation method
 %
@@ -43,26 +41,26 @@ function [hgt, jac, Kvec] = lasConf3D_2(arbitrary, control)
         coeff(3 * ii - 1, 4:6) = arbitrary(:, ii)';
         coeff(3 * ii - 0, 7:9) = arbitrary(:, ii)';
     end
-    
+
     coeff = [coeff repmat(eye(3), [n 1])];
-    
+
     Lvec = reshape(control, [n * 3, 1]);
-    
+
     params_init = coeff \ Lvec;
     rotm_init = reshape(params_init(1:9), [3, 3]);
-    
+
     % Step 1b. Scale estimation
     scale = norm(rotm_init(:, 1));
-    
+
     rotm = rotm_init / scale;
-    
+
     % Step 1c. Translation estimation
     translation = params_init(10:12);
-    
+
     % Step 2. Nonlinear LS solution of rotation
     % Step 2a. Initial apprx of omega, phi, kappa
     opk = opkFromRotationMatrix(rotm);
-    
+
     % Step 2b. Set up iteration
     L1 = 1;  % arbitrary initial value of L1 norm of NLS solution
     tol = 1e-4;
@@ -71,7 +69,7 @@ function [hgt, jac, Kvec] = lasConf3D_2(arbitrary, control)
 
     % initialize Jacobian matrix
     jac = zeros(3 * n, 7);
-    
+
     while L1 > tol && iter <= iter_max
         % Step 2c. Jacobian matrix  
         for ii = 1:n
@@ -81,29 +79,29 @@ function [hgt, jac, Kvec] = lasConf3D_2(arbitrary, control)
             );
             jac(3 * ii - 2:3 * ii, :) = A;
         end
-        
+
         % Step 2d. "Observed minus estimated" vector
         las2_hgt_aprx = [scale * rotm(1:3, 1:3)' translation; 0 0 0 1];
         con_est = las2_hgt_aprx * [arbitrary; ones(1, n)];
         Kvec = reshape(control - con_est(1:3, :), [3 * n, 1]);
-        
+
         % Step 5e. Solve and update
         delta = jac \ Kvec;
-    
+
         scale = scale + delta(1);
         opk = opk + delta(2:4);
         translation = translation + delta(5:7);
-    
+
         % rotation matrix from current approximations of o, p, k  
         rotm = makehgtform('xrotate', opk(1), 'yrotate', opk(2), ...
             'zrotate', opk(3));
         rotm = rotm(1:3, 1:3)';
-      
+
         L1 = norm(delta, 1);
         iter = iter + 1;
     end
-    
-    % Step 3: Form transformation matrix
+
+    % Step 3. Form transformation matrix
     hgt = [scale * rotm(1:3, 1:3)' translation; 0 0 0 1];
 
 end

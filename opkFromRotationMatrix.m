@@ -36,7 +36,7 @@ function [opk, gimbal_flag] = opkFromRotationMatrix(rotm, gimbal_tol)
         o = atan2(-rotm(3, 2), rotm(3, 3));
         k = atan2(-rotm(2, 1), rotm(1, 1));
     end
-    
+
     p = asin(rotm(3, 1));
 
     opk = [o p k]';

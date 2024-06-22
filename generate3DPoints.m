@@ -12,12 +12,13 @@ function [arbitrary, control, hgt, noise] = generate3DPoints( ...
 %   add this noise to the arbitrary dataset.
 %
 %   The only required arugment is number of points n. All other
-%   transformation parameters have default values. 
+%   transformation parameters have default values.
 %
 %   The default noise scalar is set to 0.
 %
 %   INPUT:
 %                  n    number of points to be generated
+%       noise_scalar    (optional) scaler for random noise
 %              s_rng    [1, 2] range for random scale for transformation
 %              o_rng    [1, 2] range for random omega rotation [deg]
 %              p_rng    [1, 2] range for random phi rotation [deg]
@@ -25,7 +26,7 @@ function [arbitrary, control, hgt, noise] = generate3DPoints( ...
 %             TX_rng    [1, 2] range for random X translation [control]
 %             TY_rng    [1, 2] range for random Y translation [control]
 %             TZ_rng    [1, 2] range for random Z translation [control]
-%       noise_scalar    (optional) scalaer for random noise
+%
 %
 %   OUTPUT:
 %          arbitrary    [3, n] aribitrary point coordinates as vectors
@@ -44,8 +45,8 @@ function [arbitrary, control, hgt, noise] = generate3DPoints( ...
         TY_rng (1,2) {mustBeNumeric} = [-1000 1000]
         TZ_rng (1,2) {mustBeNumeric} = [-1000 1000]
     end
-    
-    % generate points in an arbitrary system
+
+    % generate random points in an arbitrary system
     arbitrary = randRange([-100 100], [3 n]);
     
     % generate true transformation parameters
@@ -56,21 +57,21 @@ function [arbitrary, control, hgt, noise] = generate3DPoints( ...
     TX = randRange(TX_rng);
     TY = randRange(TY_rng);
     TZ = randRange(TZ_rng);
-    
-    % form the transform matrix
+
+    % form the homogeneous transformation matrix
     % Note: makehgtform() generates an active rotation (4 x 4 homogeneous)
     hgt = makehgtform('xrotate', omega, 'yrotate', phi, 'zrotate', kappa);
     hgt(1:3, 1:3) = scale * hgt(1:3, 1:3);
     hgt(1:3, 4) = [TX, TY, TZ];
-    
+
     % transform arbitrary to control
     arbitrary_hmg = [arbitrary; ones(1, n)];
     control_hmg = hgt * arbitrary_hmg;
     control = control_hmg(1:3, :);  % no need to divide by w (w = 1)
-    
+
     % generate noise component (recommended to add to arbitrary points)
     noise = noise_scalar * randn(size(arbitrary));
-    % arbitrary_noise = arbitrary + noise;
+
 end
 
 function r = randRange(rng, size)
@@ -80,4 +81,5 @@ function r = randRange(rng, size)
     end
 
     r = rng(1) + (rng(2) - rng(1)) * rand(size);
+
 end
