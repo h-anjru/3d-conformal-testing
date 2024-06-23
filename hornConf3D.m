@@ -1,4 +1,4 @@
-function hgt = hornConf3D(arbitrary, control)
+function [hgt, M, N, V, D] = hornConf3D(arbitrary, control)
 %% HORN3DCONF  Horn absolute orientation (quaternion method)
 %
 %   This function performs BKP Horn's algorithm for a closed-form solution 

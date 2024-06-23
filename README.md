@@ -28,13 +28,13 @@ This basic workflow can be nested inside a `for` loop, and outputs stored appror
 ## Horn closed-form unit quaternion method
 `hornConf3d()` performs BKP Horn's algorithm for a closed-form solution to the absolute orientation problem (i.e., a 3D conformal transformation)[^1]. 
 
-For a set of $n$ points $\mathbf{r}_i = \langle x_i,y_i,z_i \rangle \ \forall i \in (1,...,n)$ whose coordinates are known in both a left and right coordinate system, the algorithm first solves for the best rotation between the systems before solving for scale and translation. The algorithm, as well as some notes about its implementation in MATLAB, are summerized below. (I reserve derivation and detailed explanation of each step in this algorithm to Horn's concise manuscript.)
+For a set of $n$ points $\mathbf{r}_i = \langle x_i,y_i,z_i \rangle \ \forall i \in (1,...,n)$ whose coordinates are known in both a left and right coordinate system, the algorithm first solves for the best rotation between the systems before solving for scale and translation. The algorithm, as well as some notes about its implementation in MATLAB, are summerized below. (I defer to Horn's manuscript for derivation and detailed explanation.)
 
 ### 1. Translate to origin
 Find the centroids of the set of points in each coordinate system $\bar{\mathbf{r}_l}$ and $\bar{\mathbf{r}_r}$. Subtract each from its respective set. This yields two sets of translated point sets, denoted by a prime: $\mathbf{r}'_{l,i}$ and $\mathbf{r}'_{r,i}$.
 
 ### 2. Matrix of sums of products
-There is a $3 \times 3$ matrix whose elements are the sums of products of coordinates in the left system multiplied coordinates in the right system. As notated by Horn, this matrix is
+There is a $3 \times 3$ matrix whose elements are the sums of products of coordinates in the left system multiplied by coordinates in the right system. As notated by Horn, this matrix is
 ```math
 M=\begin{bmatrix}
 S_{xx} & S_{xy} & S_{xz} \\
@@ -57,7 +57,7 @@ If the points as column vectors are adjoined as $3 \times n$ matrices $M_l$ and 
 $M=M_l M_r^T$.
 
 ### 3. Real symmetric matrix $N$
-There is a $4 \times 4$ symmetric matrix $N$ which can be found using the elements of matrix $M$:
+There is a $4 \times 4$ real symmetric matrix $N$ which can be found using the elements of matrix $M$:
 
 ```math
 N=\begin{bmatrix}
@@ -69,7 +69,7 @@ S_{xy} - S_{yx} & S_{zx} + S_{xz} & S_{yz} + S_{zy} & -S_{xx} - S_{yy} + S_{zz}
 ```
 
 ### 4. Finding the rotation as a unit quaternion
-In the manuscript it is shown that there is a unit quaternion $\dot{q}$ which describes the rotation between the left and right coordinate systems. It is also shown that the unit quaternion $\dot{q}$ which maximizes the product $\dot{q}N\dot{q}$ is the eiginvector which corresponds to the most positive eigenvalue of natrix $N$. This eignvector is found using `[V, D] = eig(N)` and converted to a rotation matrix using `quat2rotm()`.
+In the manuscript it is shown that there is a unit quaternion $\dot{q}$ which describes the rotation from the left  to the right coordinate system. It is also shown that this unit quaternion $\dot{q}$, which maximizes the product $\dot{q}^TN\dot{q}$, is that eigenvector which corresponds to the most positive eigenvalue of matrix $N$. This eigenvector is found in the code using `[V, D] = eig(N)` and converted to a rotation matrix using `quat2rotm()`.
 
 ### 5. Finding scale
 Horn presents three formulas for finding the scale of the transformation. In this code I implement the symmetric scale formula:
@@ -84,8 +84,8 @@ Using the methods shown by Horn (and others), scale can be determined without kn
 The translation is the difference between the centroid of the right coordinate system and the scaled and rotated centroid of the left coordinate system.
 
 ### Discussion of the Horn method
-There is a clear advtantage in this method in how simple it is to implement in code, its speed when compared to iterative methods, and the stability of being a closed-form solution. To add, though not mentioned in the summary above, a stochastic model can be added to the algorithm by using weighted means to find the centroids, weighting the norms when finding scale, and weighting the sums of products in matrix $M$. These weights can implement estimates of uncertainty from the measurements in both coordinate systems, which is an advantage over the stochastic model implemented in a typical least squares adjustment.
+There is a clear advtantage in this method in how simple it is to implement in code, its speed when compared to iterative methods, and the stability of being a closed-form solution. To add, though not mentioned in the summary above, a stochastic model can be added to the algorithm by using weighted means to find the centroids, weighting the norms when finding scale, and weighting the sums of products in matrix $M$. These weights can be calculated using *a priori* estimates of uncertainty from the measurements in both coordinate systems, which is an advantage over the stochastic model implemented in a typical least squares adjustment.
 
-This solution has two disadvantages, however. First, there is no manner to look for outliers in the data sets, and there is no point in the closed-form solution which would indicate that potential outlier points have been included in the solution. Second, evaluating the quality of the solution after completion is difficult. While residuals can be found as the differences between the measured points in one or both of the coordiante systems versus the transformed points, conventional error propagation cannot be performed in the absence of a coefficient or Jacobian matrix. While the residuals can provide an estimate of the uncertainties of the observations, there is, to my knowledge, no means of ascertaining estimates of the uncertrinaties of the transformation parameters.
+In my view, this solution has two disadvantages. First, there is no method to detect outliers in the data sets; at no point in the closed-form solution is there an indication that potential outlier point(s) have been included in the solution. Second, evaluating the quality of the solution after completion is difficult. While residuals can be found from the differences between the measured points in one or both of the coordiante systems versus the transformed points, conventional error propagation cannot be performed in the absence of a coefficient or Jacobian matrix. While the residuals can provide an estimate of the uncertainties of the observations, there is, to my knowledge, no means of analytical error propagation which would provide estimates of the uncertianties of the transformation parameters.
 
 [^1]: Berthold K. P. Horn, "Closed-form solution of absolute orientation using unit quaternions," J. Opt. Soc. Am. A 4, 629-642 (1987). https://doi.org/10.1364/JOSAA.4.000629
