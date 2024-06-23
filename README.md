@@ -44,12 +44,17 @@ S_{zx} & S_{zy} & S_{zz}
 ```
 
 where
-
-$S_{xx}= \sum_ {i=1} ^{n} = x' _{l,i} x'_ {r,i}$
-$S_{xy}= \sum_ {i=1} ^{n} = x' _{l,i} y'_ {r,i}$
+```math
+S_{xx}= \sum_ {i=1} ^{n} = x' _{l,i} x'_ {r,i}
+```
+```math
+S_{xy}= \sum_ {i=1} ^{n} = x' _{l,i} y'_ {r,i}
+```
 etc.
 
-If the points as column vectors are adjoined as $3 \times n$ matrices $M_l$ and $M_r$ then $M=M_l M_r^T$.
+If the points as column vectors are adjoined as $3 \times n$ matrices $M_l$ and $M_r$ then
+
+$M=M_l M_r^T$.
 
 ### 3. Real symmetric matrix $N$
 There is a $4 \times 4$ symmetric matrix $N$ which can be found using the elements of matrix $M$:
@@ -69,9 +74,11 @@ In the manuscript it is shown that there is a unit quaternion $\dot{q}$ which de
 ### 5. Finding scale
 Horn presents three formulas for finding the scale of the transformation. In this code I implement the symmetric scale formula:
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$s=\sum_{i=1}^{n} ||\mathbf{r}'_{r,i}|| \ \ / \ \sum_{i=1}^{n} ||\mathbf{r}'_{l,i}||$
+```math
+s=\sum_{i=1}^{n} ||\mathbf{r}'_{r,i}|| \ \ / \ \sum_{i=1}^{n} ||\mathbf{r}'_{l,i}||
+```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Using the methods shown by Horn (and others), scale can be determined without knowing the rotation, and the solution for rotation is not affected by the scale. 
+Using the methods shown by Horn (and others), scale can be determined without knowing the rotation, and the solution for rotation is not affected by the scale. 
 
 ### 6. Finding the translation
 The translation is the difference between the centroid of the right coordinate system and the scaled and rotated centroid of the left coordinate system.
