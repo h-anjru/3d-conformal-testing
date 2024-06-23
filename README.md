@@ -45,8 +45,8 @@ S_{zx} & S_{zy} & S_{zz}
 
 where
 
-$S_{xx}= \sum_{i=1}^{n} = x'_{l,i}x'_{r,i}$
-$S_{xy}= \sum_{i=1}^{n} = x'_{l,i}y'_{r,i} \:\:\:\:\:$
+$S_{xx}= \sum_ {i=1} ^{n} = x' _{l,i} x'_ {r,i}$
+$S_{xy}= \sum_ {i=1} ^{n} = x' _{l,i} y'_ {r,i}$
 etc.
 
 If the points as column vectors are adjoined as $3 \times n$ matrices $M_l$ and $M_r$ then $M=M_l M_r^T$.
