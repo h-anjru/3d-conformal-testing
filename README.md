@@ -45,7 +45,9 @@ S_{zx} & S_{zy} & S_{zz}
 
 where
 
-$S_{xx}= \sum_{i=1}^{n} = x'_{l,i}x'_{r,i} \:\:\:\:\:\:\:\:\:\: S_{xy}= \sum_{i=1}^{n} = x'_{l,i}y'_{r,i} \:\:\:\:\:$ etc.
+$S_{xx}= \sum_{i=1}^{n} = x'_{l,i}x'_{r,i}$
+$S_{xy}= \sum_{i=1}^{n} = x'_{l,i}y'_{r,i} \:\:\:\:\:$
+etc.
 
 If the points as column vectors are adjoined as $3 \times n$ matrices $M_l$ and $M_r$ then $M=M_l M_r^T$.
 
@@ -67,7 +69,7 @@ In the manuscript it is shown that there is a unit quaternion $\dot{q}$ which de
 ### 5. Finding scale
 Horn presents three formulas for finding the scale of the transformation. In this code I implement the symmetric scale formula:
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$s=\sum_{i=1}^{n} ||\mathbf{r}'_{r,i}|| \bigg/ \sum_{i=1}^{n} ||\mathbf{r}'_{l,i}||$
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$s=\sum_{i=1}^{n} ||\mathbf{r}'_{r,i}|| \ \ / \ \sum_{i=1}^{n} ||\mathbf{r}'_{l,i}||$
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Using the methods shown by Horn (and others), scale can be determined without knowing the rotation, and the solution for rotation is not affected by the scale. 
 
@@ -77,6 +79,6 @@ The translation is the difference between the centroid of the right coordinate s
 ### Discussion of the Horn method
 There is a clear advtantage in this method in how simple it is to implement in code, its speed when compared to iterative methods, and the stability of being a closed-form solution. To add, though not mentioned in the summary above, a stochastic model can be added to the algorithm by using weighted means to find the centroids, weighting the norms when finding scale, and weighting the sums of products in matrix $M$. These weights can implement estimates of uncertainty from the measurements in both coordinate systems, which is an advantage over the stochastic model implemented in a typical least squares adjustment.
 
-This solution has two disadvantages, however. First, there is no manner to look for outliers in the data sets, and there is no point in the closed-form solution which would indicate that potential outlier points have been included in the solution. Second, evaluating the quality of the solution after completion is difficult. While residuals can be found as the differences between the measured points in one or both of the coordiante systems versus the transformed points, conventional error propagation cannot be performed in the absence of a coefficient/Jacobian matrix. While the residuals can provide an estimate of the uncertainties of the observations, there is, to my knowledge, no means of ascertaining estimates of the uncertrinaties of the transformation parameters.
+This solution has two disadvantages, however. First, there is no manner to look for outliers in the data sets, and there is no point in the closed-form solution which would indicate that potential outlier points have been included in the solution. Second, evaluating the quality of the solution after completion is difficult. While residuals can be found as the differences between the measured points in one or both of the coordiante systems versus the transformed points, conventional error propagation cannot be performed in the absence of a coefficient or Jacobian matrix. While the residuals can provide an estimate of the uncertainties of the observations, there is, to my knowledge, no means of ascertaining estimates of the uncertrinaties of the transformation parameters.
 
 [^1]: Berthold K. P. Horn, "Closed-form solution of absolute orientation using unit quaternions," J. Opt. Soc. Am. A 4, 629-642 (1987). https://doi.org/10.1364/JOSAA.4.000629
