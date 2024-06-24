@@ -51,9 +51,9 @@ A common method for solving for the transformation parameters is a nonlinear lea
 
 ```math
 \mathbf{x}_t = sR^T\mathbf{x}_o + \mathbf{T} \implies \\
+```
 
-\ \\
-
+```math
 \begin{bmatrix}
 x_t \\ y_t \\ z_t
 \end{bmatrix} = 
@@ -73,13 +73,13 @@ x_o \\ y_o \\ z_o
 \begin{bmatrix}
 T_x \\ T_y \\ T_z
 \end{bmatrix} \implies \\
-
-\ \\
-
+```
+```math
 x_t = sr_{11}x_o + sr_{21}y + sr_{31} + T_x \\
 y_t = sr_{12}x_o + sr_{22}y + sr_{32} + T_y \\
 z_t = sr_{13}x_o + sr_{23}y + sr_{33} + T_z
 ```
+
 If the elements of matrix $R$ are treated as coefficients, then this is a linear problem. However, these elements of $R$ are commonly expressed in terms of trigonometric functions of Euler angles—omega $\omega$, phi $\phi$, and kappa $\kappa$—which describe three sequential rotations about the $x$-, $y$-, and $z$-axes, respectively. In other words, the above observation equations are nonlinear, and thus a nonlinear least squares solution requires initial approximations.
 
 Obtaining the initial approximations using only the coordinate correspondences in the initial and targets coordinate systems is an open problem. The method proposed by Dewitt (1996)[^1] is taught in a popular textbook on photogrammetry (Wolf et al. 2014)[^2], but this five-step method requires decisions on which of the common points to use, and only three common points can be used. Ruffhead (2021)[^3] offers a novel approach to the problem, but the method presented relies upon the use of small angle approximations, which is applicable to the Bursa-Wolf transformation in geodesy, but is not generally applicable to photogrammetry or lidar. A direct linear method is presented by Awange and Grafarend (2003)[^4] using a technique called the Grobner basis, and while the solution is linear, its implementation is by no means simpler, nor was it demonstrated by the authors to be advantageous in terms of accuracy/fit.
@@ -109,7 +109,6 @@ S_{yx} & S_{yy} & S_{yz} \\
 S_{zx} & S_{zy} & S_{zz}
 \end{bmatrix}
 ```
-
 where
 ```math
 S_{xx}= \sum_ {i=1} ^{n} = x' _{l,i} x'_ {r,i}
