@@ -75,9 +75,11 @@ T_x \\ T_y \\ T_z
 \end{bmatrix} \implies \\
 ```
 ```math
+\begin{aligned}
 x_t = sr_{11}x_o + sr_{21}y + sr_{31} + T_x \\
 y_t = sr_{12}x_o + sr_{22}y + sr_{32} + T_y \\
 z_t = sr_{13}x_o + sr_{23}y + sr_{33} + T_z
+\end{aligned}
 ```
 
 If the elements of matrix $R$ are treated as coefficients, then this is a linear problem. However, these elements of $R$ are commonly expressed in terms of trigonometric functions of Euler angles—omega $\omega$, phi $\phi$, and kappa $\kappa$—which describe three sequential rotations about the $x$-, $y$-, and $z$-axes, respectively. In other words, the above observation equations are nonlinear, and thus a nonlinear least squares solution requires initial approximations.
