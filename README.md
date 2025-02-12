@@ -1,6 +1,9 @@
 # 3d-conformal-testing
 A series of functions purpose built for testing and comparing various methods of performing the 3D conformal coordinate transformation (i.e. absolute orientation).
 
+## ASPRS at Geo Week 2025 presentation
+See the presentation [here](https://github.com/h-anjru/3d-conformal-testing/blob/main/Lassiter%20-%203D%20conformal%20-%20ASPRS%20at%20Geo%20Week%202025.pdf).
+
 ## Overview
 The 3D conformal coordinate transformation has applications in photogrammetry, lidar, robotics, and geodesy. In these applications, one must express the coordinates of a set of 3D points known in one coordinate system relative to another coordiante system. For example, data collected by a lidar scanner are initially expressed in a coordinate system which is relative to the scanner, but the desired result is to express these data in terms of a world coordinate system. One means of finding the relationship between two coordinate systems is to measure the coordinates of a set of points common to both the coordinate systems. Once the relationship between the two coordinate systems—the transformation—is solved, the whole of the point data in one system can be transformed to the other.
 
