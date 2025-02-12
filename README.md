@@ -53,7 +53,7 @@ In the figure below, the pose of the original coordinate system with respect to 
 A common method for solving for the transformation parameters is a nonlinear least squares adjustment. The transformation is expressed as a set of three observation questions per point:
 
 ```math
-\mathbf{x}_t = sR^T\mathbf{x}_o + \mathbf{T} \implies \\
+\mathbf{x}_t = sR^T\mathbf{x}_o + \mathbf{T}
 ```
 
 ```math
@@ -75,7 +75,7 @@ x_o \\ y_o \\ z_o
 
 \begin{bmatrix}
 T_x \\ T_y \\ T_z
-\end{bmatrix} \implies \\
+\end{bmatrix}
 ```
 ```math
 \begin{aligned}
@@ -103,7 +103,7 @@ Coming soon.
 The algorithm first solves for the best rotation between the systems before solving for scale and translation. The algorithm, as well as some notes about its implementation in MATLAB, are summerized below. (I defer to Horn's manuscript for derivation and detailed explanation.)
 
 ### 1. Translate to origin
-Find the centroids of the set of points in each coordinate system $\bar{\mathbf{x}_l}$ and $\bar{\mathbf{x}_r}$. Subtract each from its respective set. This yields two sets of translated point sets, denoted by a prime: $\mathbf{x}'_{l,i}$ and $\mathbf{x}'_{r,i}$.
+Find the centroids of the set of points in each coordinate system $`\bar{\mathbf{x}_l}`$ and $`\bar{\mathbf{x}_r}`$. Subtract each from its respective set. This yields two sets of translated point sets, denoted by a prime: $`{x}'_{l,i}$ and ${x}'_{r,i}`$.
 
 ### 2. Matrix of sums of products
 There is a $3 \times 3$ matrix whose elements are the sums of products of coordinates in the left system multiplied by coordinates in the right system. As notated by Horn, this matrix is
