@@ -1,4 +1,4 @@
-function [hgt, jac, Kvec] = lasConf3D_2(arbitrary, control)
+function [hgt, jac, Kvec, hgt_init, flag] = lasConf3D_2(arbitrary, control)
 %% LAS3DCONF2 (Another) Lassiter 3D conformal transformation method
 %
 %   This function performs a 3D conformal coordinate transformation
@@ -57,13 +57,16 @@ function [hgt, jac, Kvec] = lasConf3D_2(arbitrary, control)
     % Step 1c. Translation estimation
     translation = params_init(10:12);
 
+    % Initial transform matrix for comparison
+    hgt_init = [scale * rotm(1:3, 1:3)' translation; 0 0 0 1];
+
     % Step 2. Nonlinear LS solution of rotation
     % Step 2a. Initial apprx of omega, phi, kappa
-    opk = opkFromRotationMatrix(rotm);
+    [opk, gimbal_flag] = opkFromRotationMatrix(rotm);
 
     % Step 2b. Set up iteration
     L1 = 1;  % arbitrary initial value of L1 norm of NLS solution
-    tol = 1e-4;
+    tol = 1e-10;
     iter = 1;
     iter_max = 20;
 
@@ -103,5 +106,12 @@ function [hgt, jac, Kvec] = lasConf3D_2(arbitrary, control)
 
     % Step 3. Form transformation matrix
     hgt = [scale * rotm(1:3, 1:3)' translation; 0 0 0 1];
+
+    % Gimbal lock flag
+    flag = false;
+    
+    if gimbal_flag
+        flag = true;
+    end
 
 end
