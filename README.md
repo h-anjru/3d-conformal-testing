@@ -18,13 +18,11 @@ After a dataset is generated, the transformation can be solved using the availab
 [arb, con, hgt, noise] = generate3DPoints(5, 0.1);
 
 % Solve for transformation using Horn closed-form method
-hgt_horn = hornConf3D(arb + noise, con);
+hgt_horn = conf3d_horn(arb + noise, con);
 
-% Solve via Lassiter method (direct linear estimation of rotation only)
-[hgt_las, jac_las, K_las] = lasConf3D(arb + noise, con);
-
-% Solve via direct linear estimation of all parameters
-[hgt_las2, jac_las2, K_las2] = lasConf3D_2(arb + noise, con);
+% Solve via nonlinear least squares
+hgt_init = conf3d_dle(arb + noise, con);
+[hgt_nls, jac_nls, K_nls] = conf3d_nls(arb + noise, con);
 ```
 This basic workflow can be nested inside a `for` loop, and outputs stored approriately, for the purposes of Monte Carlo simulations or other tests.
 
